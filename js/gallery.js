@@ -1,4 +1,4 @@
-const basicLightbox = require('basiclightbox')
+
 const images = [
   {
     preview:
@@ -64,3 +64,33 @@ const images = [
     description: 'Lighthouse Coast Sea',
   },
 ];
+
+
+const galleryEl = document.querySelector('.gallery');
+const galleryMurk = images
+ .map(
+    ({ preview, original, description }) => `
+    <li class="gallery-item">
+    <a class="gallery-link" href="${original}">
+    <img 
+    class="gallery-image"
+    src="${preview}"
+    data-source="${original}"
+    alt="${description}"
+    />
+    </a>
+    </li>`
+ )
+ .join('');
+ galleryEl.insertAdjacentHTML('beforeend', galleryMurk);
+ galleryEl.addEventListener('click', onGalleryClik);
+ function onGalleryClik(event) {
+    event.preventDefault();
+    const isImg = event.target.classList.contains('gallery-image');
+    if (!isImg) return;
+    const larImageUrl = event.target.dataset.source;
+    const insta = basicLightbox.create(`
+        <img src="${larImageUrl}" width="800" alt="${event.target.alt}">
+        `);
+        insta.show();
+ }
